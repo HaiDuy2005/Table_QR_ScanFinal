@@ -1,0 +1,216 @@
+/* RestaurantQR – giao diện: nền cam + mực đen, tờ giấy trắng, không gradient, không đổ bóng khi nghỉ */
+:root {
+  --ground:#f3f1ee; --surface:#fff; --raised:#f4f2ef; --active:#ebe8e4; --line:#e6e9ec; --control:#c9ccd1;
+  --ink:#050f16; --brand:#ff7a1f; --brand-soft:#ff9a52; --muted:#5b5e63; --accent:#b84a00; --accent-soft:#ffe6d4;
+  --pos:#1e7b4f; --neg:#c4242a; --paper:#fffdf9;
+  --font:"Libre Franklin",system-ui,-apple-system,"Segoe UI",sans-serif; --display:"Besley",Georgia,serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--ink);font:14px/1.45 var(--font);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.display{font-family:var(--display);font-weight:800;letter-spacing:-.02em}
+.muted{color:var(--muted)} .tiny{font-size:12px} .mono{font-family:var(--mono)} .right{text-align:right}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.grid{display:grid} .gap{gap:12px} .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap} .between{justify-content:space-between}
+.mt{margin-top:16px} .mt-s{margin-top:8px}
+
+/* ---- Nút, ô nhập, nhãn ---- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 16px;border:0;border-radius:6px;background:var(--active);font-weight:600;text-decoration:none;transition:transform .15s,background .15s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)} .btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-ink{background:var(--ink);color:var(--brand)} .btn-accent{background:var(--accent);color:#fff}
+.btn-brand{background:var(--brand);color:var(--ink)} .btn-danger{background:#ffedea;color:#831c1e}
+.btn-ghost{background:transparent;color:var(--muted)} .btn-ghost:hover{background:var(--active)}
+.btn-sm{height:32px;padding:0 12px;font-size:13px} .btn-lg{height:52px;font-size:16px;padding:0 24px} .btn-block{width:100%}
+input[type=text],input[type=password],input[type=number],input[type=search],input[type=url],select,textarea{width:100%;height:40px;padding:0 12px;border:1px solid var(--control);border-radius:6px;background:#fff}
+textarea{height:auto;min-height:72px;padding:8px 12px}
+label.f{display:grid;gap:4px;font-size:13px;font-weight:600} label.f span.hint{font-weight:400;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill-pos{background:#dcfae5;color:#04250e} .pill-neg{background:#ffedea;color:#831c1e} .pill-warn{background:#fff3d6;color:#7a3508}
+.pill-acc{background:#ffe3cf;color:#6b2a00} .pill-neu{background:#e9ecef;color:#353736}
+.flash{padding:10px 14px;border-radius:8px;margin:0 0 12px;font-weight:500;animation:fadeUp .35s both}
+.flash-ok{background:#dcfae5;color:#04250e} .flash-err{background:#ffedea;color:#831c1e}
+.empty{padding:28px 16px;text-align:center;background:var(--raised);border-radius:10px} .empty h3{font-size:16px;margin-bottom:4px}
+.stepper{display:inline-flex;align-items:center;gap:2px;background:var(--raised);border-radius:999px;padding:2px}
+.stepper form{margin:0} .stepper button{width:36px;height:36px;border:0;border-radius:50%;background:transparent;font-size:18px;font-weight:700}
+.stepper button:hover{background:var(--active)} .stepper b{min-width:26px;text-align:center}
+
+/* ---- Hiệu ứng chuyển động ---- */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pulse{50%{opacity:.35}}
+@keyframes rise{from{opacity:0;transform:translateY(150px)}to{opacity:1;transform:none}}
+@keyframes charIn{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease;transition-delay:var(--d,0s)}
+.reveal.in{opacity:1;transform:none}
+.fade-in{animation:fadeUp .5s both;animation-delay:var(--d,0s)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--brand);animation:pulse 1.4s infinite}
+.scroll-bar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--ink);z-index:60}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}.reveal{opacity:1;transform:none}}
+
+/* ---- Trang chủ khách ---- */
+.home{background:var(--ink);color:#fff}
+.hero{position:relative;min-height:max(100svh,880px);background:var(--brand);overflow:hidden}
+.topbar{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;color:var(--ink)}
+.topbar .brand{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:600;text-decoration:none}
+.topbar nav{display:none;gap:32px;font-size:16px;font-weight:500} .topbar nav a{text-decoration:none} .topbar nav a:hover{text-decoration:underline;text-underline-offset:4px}
+@media(min-width:800px){.topbar nav{display:flex}}
+.ticket{position:absolute;left:0;right:0;top:100px;margin:0 auto;width:min(calc(100% - 24px),460px);animation:rise 1s cubic-bezier(.2,.8,.2,1) both;color:var(--ink)}
+.ticket-in{background:var(--paper);padding:36px 28px 90px;-webkit-mask:radial-gradient(circle 20px at 0 0,#0000 97%,#000) top left/51% 51% no-repeat,radial-gradient(circle 20px at 100% 0,#0000 97%,#000) top right/51% 51% no-repeat,radial-gradient(circle 20px at 0 100%,#0000 97%,#000) bottom left/51% 51% no-repeat,radial-gradient(circle 20px at 100% 100%,#0000 97%,#000) bottom right/51% 51% no-repeat;
+  mask:radial-gradient(circle 20px at 0 0,#0000 97%,#000) top left/51% 51% no-repeat,radial-gradient(circle 20px at 100% 0,#0000 97%,#000) top right/51% 51% no-repeat,radial-gradient(circle 20px at 0 100%,#0000 97%,#000) bottom left/51% 51% no-repeat,radial-gradient(circle 20px at 100% 100%,#0000 97%,#000) bottom right/51% 51% no-repeat;transition:transform .2s}
+.ticket h1{font-size:clamp(46px,12vw,76px);font-style:italic;line-height:.95;margin-top:22px}
+.ticket h1 span{display:block;overflow:hidden;padding-bottom:.14em} .ticket h1 span:nth-child(2){text-align:right}
+.ticket h1 i{display:inline-block;font-style:italic;animation:charIn .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*.045s + var(--o,0s))}
+.ticket .tags{display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:center;margin-top:22px;font-size:15px;align-items:center}
+.diamond{display:inline-block;width:10px;height:10px;background:var(--ink);transform:rotate(45deg)}
+.picker{margin-top:28px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;background:rgba(255,122,31,.15);padding:16px}
+.picker .qr{background:#fff;padding:8px;width:122px;height:122px;display:grid;place-items:center}
+.picker .qr img,.picker .qr canvas{max-width:100%}
+.picker .num{font-size:34px;line-height:1;display:flex;align-items:baseline;gap:6px}
+.picker .nav{display:flex;align-items:center;gap:8px}
+.sq{width:36px;height:36px;border:0;border-radius:4px;background:var(--ink);color:var(--brand);font-size:18px}
+.menu-dots{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:12px;font-size:16px}
+.menu-dots li{display:flex;align-items:flex-end;gap:8px} .menu-dots li i{flex:1;border-bottom:4px dotted rgba(5,15,22,.3);margin-bottom:5px}
+.section{padding:90px 24px} .wrap{max-width:1200px;margin:0 auto}
+.section.white{background:#fff;color:var(--ink)} .section.ink{background:var(--ink);color:#fff} .section.orange{background:var(--brand);color:var(--ink)}
+.section h2{font-size:clamp(34px,4vw,60px);line-height:1}
+.lead{font-size:19px;max-width:46ch;margin-top:16px}
+.table-grid{list-style:none;padding:0;margin:40px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(min-width:700px){.table-grid{grid-template-columns:repeat(5,1fr)}}
+.tcard{display:grid;gap:10px;width:100%;padding:16px;border:0;text-align:left;background:#f3f1ee;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+.tcard:hover{transform:translateY(-5px)} .tcard:active{transform:scale(.96)} .tcard.open{background:var(--brand)}
+.tcard .n{font-family:var(--display);font-weight:800;font-size:34px;line-height:1}
+.slip-wrap{display:grid;gap:48px;max-width:1200px;margin:0 auto;align-items:start}
+@media(min-width:960px){.slip-wrap{grid-template-columns:5fr 6fr;gap:80px}}
+.slip{background:var(--paper);color:var(--ink);max-width:460px;width:100%;margin:0 auto;padding:28px 28px 56px;clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),95.4% 100%,90.9% calc(100% - 12px),86.4% 100%,81.8% calc(100% - 12px),77.3% 100%,72.7% calc(100% - 12px),68.2% 100%,63.6% calc(100% - 12px),59.1% 100%,54.5% calc(100% - 12px),50% 100%,45.5% calc(100% - 12px),40.9% 100%,36.4% calc(100% - 12px),31.8% 100%,27.3% calc(100% - 12px),22.7% 100%,18.2% calc(100% - 12px),13.6% 100%,9.1% calc(100% - 12px),4.5% 100%,0 calc(100% - 12px))}
+.slip h3{font-size:16px;margin-top:26px} .slip ul{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:8px}
+.slip li{display:flex;align-items:flex-end;gap:8px;font-size:16px} .slip li i{flex:1;border-bottom:4px dotted rgba(5,15,22,.3);margin-bottom:5px}
+.slip .total{margin:32px -28px 0;height:44px;background:var(--ink);color:var(--brand);display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-weight:600}
+.dish-split{display:grid;min-height:88svh}
+@media(min-width:960px){.dish-split{grid-template-columns:1fr 1fr}}
+.dish-pic{display:grid;place-items:center;padding:24px}
+.dish-sq{position:relative;aspect-ratio:1;width:min(100%,560px);overflow:hidden}
+.dish-sq svg,.dish-sq img{width:100%;height:100%;object-fit:cover;animation:fadeUp .4s both}
+.dish-sq::after{content:"";position:absolute;left:50%;top:50%;width:86%;height:86%;transform:translate(-50%,-50%);border:6px solid var(--ink);border-radius:50%}
+.dish-info{display:flex;flex-direction:column;justify-content:space-between;gap:40px;padding:24px;color:var(--ink)}
+@media(min-width:960px){.dish-info{padding:64px 40px}}
+.dtabs{display:flex;gap:20px;overflow-x:auto;border-bottom:4px solid transparent}
+.dtabs button{border:0;background:none;padding:8px 0;font-size:18px;color:#5a2306;border-bottom:4px solid transparent;margin-bottom:-4px;white-space:nowrap}
+.dtabs button.on{color:var(--ink);font-weight:600;border-color:var(--ink)}
+.cta2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cta2 a,.cta2 button{height:72px;border:0;font-size:18px;font-weight:600;display:grid;place-items:center;text-decoration:none}
+.ledger{list-style:none;padding:0;margin:0;display:grid;gap:24px}
+.ledger li{display:grid;grid-template-columns:minmax(80px,1fr) 2fr;gap:20px;align-items:baseline}
+.ledger b{font-family:var(--display);font-weight:800;text-align:right;font-size:clamp(60px,7vw,108px);line-height:1}
+.two{display:grid;gap:48px;max-width:1200px;margin:0 auto} @media(min-width:960px){.two{grid-template-columns:5fr 6fr;align-items:center}}
+.cta-card{background:var(--paper);color:var(--ink);padding:40px 32px 90px;text-align:center;max-width:640px;transform:rotate(2deg);margin-bottom:-60px}
+.cta-card h2{font-size:clamp(28px,3vw,40px)}
+.site-foot{background:var(--brand);color:var(--ink);padding:60px 24px 24px}
+.foot-card{max-width:1000px;margin:0 auto;background:var(--paper);padding:56px 28px 56px;display:grid;gap:24px}
+@media(min-width:700px){.foot-card{grid-template-columns:1fr 1fr;padding:56px 48px}}
+.foot-card a{text-decoration:underline;text-underline-offset:4px;font-size:18px}
+
+/* ---- Hộp thoại chọn bàn ---- */
+dialog{border:0;border-radius:16px;padding:0;width:min(94vw,460px);color:var(--ink)}
+dialog::backdrop{background:rgba(5,15,22,.55)}
+dialog[open]{animation:fadeUp .3s both}
+.dlg{padding:24px;display:grid;gap:14px} .dlg h2{font-size:26px}
+.tabs2{display:grid;grid-template-columns:1fr 1fr;background:var(--raised);border-radius:8px;padding:3px}
+.tabs2 button{height:36px;border:0;border-radius:6px;background:transparent;font-weight:600;color:var(--muted)} .tabs2 button.on{background:#fff;color:var(--ink)}
+.codein{font-family:var(--mono);font-size:34px!important;height:60px!important;text-align:center;letter-spacing:.4em}
+
+/* ---- Khách tại bàn (khung điện thoại) ---- */
+.cust{max-width:480px;margin:0 auto;min-height:100vh;background:var(--surface);display:flex;flex-direction:column;border-inline:1px solid var(--line)}
+.cust header{position:sticky;top:0;z-index:30;background:var(--brand);padding:12px 16px}
+.cust header h1{font-size:34px;font-style:italic;line-height:1} .cust header .live{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;background:var(--ink);color:var(--brand);font-size:13px;font-weight:600;border-radius:3px}
+.cust main{flex:1;padding-bottom:110px}
+.cust .pad{padding:16px}
+.botnav{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);background:#fff;border-top:1px solid var(--line);z-index:40}
+.botnav a{position:relative;height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none}
+.botnav a.on{color:var(--ink)} .botnav a.on::before{content:"";position:absolute;top:0;left:24px;right:24px;height:4px;background:var(--brand)}
+.badge{position:absolute;top:8px;margin-left:30px;background:var(--brand);color:var(--ink);font-size:11px;min-width:20px;height:20px;border-radius:10px;display:grid;place-items:center;padding:0 5px}
+.searchbar{position:sticky;top:76px;z-index:20;background:#fff;padding:12px 16px;display:grid;gap:10px}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px} .chips::-webkit-scrollbar{display:none}
+.chips a{flex:none;height:36px;display:grid;place-items:center;padding:0 14px;border-radius:999px;font-size:13px;font-weight:600;text-decoration:none;transition:background .2s,color .2s} .chips a.on{background:var(--ink);color:var(--brand)}
+.dishes{list-style:none;margin:0;padding:0;background:var(--line);display:grid;gap:1px}
+.dish{display:flex;gap:12px;padding:16px;background:#fff;animation:fadeUp .45s both;animation-delay:calc(var(--i,0)*.04s)}
+.dish .pic{width:92px;height:92px;flex:none;border-radius:6px;overflow:hidden} .dish .pic svg,.dish .pic img{width:100%;height:100%;object-fit:cover;transition:transform .5s} .dish:hover .pic svg,.dish:hover .pic img{transform:scale(1.1)}
+.dish .info{flex:1;min-width:0;display:flex;flex-direction:column} .dish h2{font-size:16px;line-height:1.3}
+.dish .desc{font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dish .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;padding-top:8px}
+.cartbar{position:fixed;left:0;right:0;bottom:64px;max-width:480px;margin:0 auto;padding:0 16px 12px;z-index:30}
+.cartbar a{display:flex;height:56px;align-items:center;justify-content:space-between;padding:0 20px;background:var(--ink);color:var(--brand);border-radius:4px;text-decoration:none;font-weight:600}
+.card{background:var(--raised);border-radius:12px;padding:14px;display:grid;gap:10px}
+.line{display:grid;gap:8px;padding:14px 0;border-bottom:1px solid var(--line)}
+.total-row{display:flex;justify-content:space-between;align-items:baseline;font-size:18px;font-weight:700}
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}
+.pipe div{background:#fff;border-radius:8px;padding:8px 4px} .pipe b{display:block;font-size:20px}
+.ticket-lite{background:var(--paper);border:1px dashed var(--control);padding:14px;border-radius:6px}
+
+/* ---- Nhân viên: khung chữ L, tờ giấy trắng ---- */
+.shell{min-height:100vh;display:grid;grid-template-columns:1fr;grid-template-rows:auto auto 1fr;background:var(--ground)}
+@media(min-width:980px){.shell{grid-template-columns:228px 1fr;grid-template-rows:48px 1fr;height:100vh}}
+.side{display:flex;align-items:center;gap:12px;padding:12px 16px}
+@media(min-width:980px){.side{grid-row:span 2;flex-direction:column;align-items:stretch;gap:0;padding:16px 12px}}
+.side .logo{display:flex;align-items:center;gap:10px;padding:0 8px} @media(min-width:980px){.side .logo{padding-bottom:20px}}
+.side nav{display:flex;gap:2px;overflow-x:auto;flex:1} @media(min-width:980px){.side nav{flex-direction:column;flex:none}}
+.side nav a{display:flex;align-items:center;gap:10px;height:40px;padding:0 10px;border-radius:6px;color:var(--muted);text-decoration:none;white-space:nowrap;transition:background .2s}
+.side nav a:hover{background:var(--active)} .side nav a.on{background:var(--active);color:var(--ink);font-weight:600}
+.side nav a i{font-style:normal;width:24px;height:24px;display:grid;place-items:center;border-radius:5px} .side nav a.on i{background:var(--brand)}
+.sbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;min-height:48px}
+.sheet{margin:0 8px 8px;border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:16px;overflow:auto;min-height:0}
+@media(min-width:980px){.sheet{margin:0 8px 8px 0;padding:24px}}
+.sheet>h1{font-size:22px;font-weight:600} .sheet .sub{color:var(--muted);margin:2px 0 16px}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border-radius:10px;overflow:hidden;margin-bottom:20px}
+@media(min-width:800px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpis div{background:#fff;padding:14px 16px} .kpis small{display:block;color:var(--muted)} .kpis b{font-size:26px;font-weight:700;display:block;margin-top:2px}
+.cols{display:grid;gap:20px} @media(min-width:1100px){.cols{grid-template-columns:minmax(300px,1fr) 1.4fr;align-items:start}}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.tbtn{display:grid;gap:6px;padding:12px;border-radius:10px;background:var(--raised);text-decoration:none;border:2px solid transparent;transition:transform .2s,border-color .2s}
+.tbtn:hover{transform:translateY(-2px)} .tbtn.sel{border-color:var(--ink)}
+.tbtn.st-serving{background:#ffe3cf} .tbtn.st-awaiting-payment{background:#fff3d6} .tbtn.st-paid{background:#dcfae5}
+.tbtn b{font-size:15px}
+.panel{border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:14px}
+.panel h2{font-size:18px}
+table.t{width:100%;border-collapse:collapse} table.t th{text-align:left;font-size:12px;color:var(--muted);font-weight:600;padding:8px;border-bottom:1px solid var(--line)}
+table.t td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top} table.t tr:hover td{background:#fafaf9}
+.table-wrap{overflow-x:auto}
+.note-row{background:var(--accent-soft);border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+details.inl{margin-top:6px} details.inl summary{cursor:pointer;color:var(--accent);font-size:13px;font-weight:600}
+details.inl form{display:grid;gap:8px;margin-top:8px;padding:10px;background:var(--raised);border-radius:8px}
+.qrbox{background:#fff;border:1px solid var(--line);padding:10px;width:fit-content;border-radius:6px}
+.codebig{font-family:var(--mono);font-size:30px;letter-spacing:.3em;font-weight:600}
+.kcard{border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:10px;background:#fff;animation:fadeUp .4s both}
+.kgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.formgrid{display:grid;gap:14px;max-width:640px}
+@media(min-width:600px){.formgrid.two-c{grid-template-columns:1fr 1fr}}
+.tabbar{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
+.tabbar a{height:34px;display:inline-flex;align-items:center;padding:0 14px;border-radius:999px;background:var(--raised);text-decoration:none;font-weight:600;font-size:13px} .tabbar a.on{background:var(--ink);color:var(--brand)}
+
+/* ---- Đăng nhập ---- */
+.login{min-height:100vh;background:var(--brand);display:grid;place-items:center;padding:24px}
+.login .card2{background:var(--paper);width:min(94vw,420px);padding:32px 28px;animation:rise .8s cubic-bezier(.2,.8,.2,1) both;display:grid;gap:16px}
+.login h1{font-size:40px;font-style:italic;line-height:1}
+
+@media print{.no-print{display:none!important}body{background:#fff}}
+.menu-back .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 13px;
+    border: 1px solid #444;
+    border-radius: 7px;
+    background: #111;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.menu-back .btn-back:hover {
+    background: #333;
+}
