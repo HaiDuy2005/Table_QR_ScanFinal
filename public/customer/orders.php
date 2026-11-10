@@ -43,7 +43,7 @@ customer_open($table, $session, 'orders', 'Đơn của bàn', 4);
           </div>
           <?php if ($it['note'] !== ''): ?><span class="tiny muted">Ghi chú: <?= e($it['note']) ?></span><?php endif; ?>
           <?php if ((int) $it['cancelled'] > 0): ?><span class="tiny" style="color:var(--neg)">Đã hủy <?= (int) $it['cancelled'] ?> phần</span><?php endif; ?>
-            <?php if ($n > 0): ?><span class="tiny muted">Đã làm <?= (int) $it['done'] ?>/<?= $n ?> · Đã mang ra <?= (int) $it['served'] ?>/<?= $n ?></span><?php endif; ?>
+          <?php if ($n > 0): ?><span class="tiny muted">Đã làm <?= (int) $it['done'] ?>/<?= $n ?> · Đã mang ra <?= (int) $it['served'] ?>/<?= $n ?></span><?php endif; ?>
         </div>
       <?php endforeach; ?>
     </section>

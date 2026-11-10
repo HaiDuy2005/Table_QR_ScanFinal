@@ -8,7 +8,7 @@ function notices_open(): array
 function notice_add(int $sessionId, int $tableId, string $kind, string $text): void
 {
     if (fetch_one('SELECT id FROM notices WHERE session_id = ? AND kind = ? AND handled = 0', [$sessionId, $kind])) {
-        return; 
+        return; // đã có thông báo cùng loại chưa xử lý
     }
     q('INSERT INTO notices (session_id, table_id, kind, text, handled, created_at) VALUES (?,?,?,?,0,?)', [$sessionId, $tableId, $kind, $text, now()]);
 }

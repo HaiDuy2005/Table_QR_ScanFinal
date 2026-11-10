@@ -60,7 +60,7 @@ staff_open('Thu ngân', 'public/staff/cashier.php', 5);
           <?= pill(TABLE_STATUS_LABEL[$st], TABLE_STATUS_TONE[$st]) ?>
           <?php if ($s): ?><span class="tiny muted">Từ <?= e(fmt_time($s['opened_at'])) ?></span><?php else: ?><span class="tiny muted"><?= (int) $t['seats'] ?> chỗ</span><?php endif; ?>
         </a>
-        <?php endforeach; ?>
+      <?php endforeach; ?>
     </div>
   </section>
 
@@ -105,7 +105,7 @@ staff_open('Thu ngân', 'public/staff/cashier.php', 5);
               <td class="mono"><?= e($o['code']) ?><div class="tiny muted"><?= e(fmt_time($o['created_at'])) ?></div></td>
               <td><b style="<?= $stg === 'cancelled' ? 'text-decoration:line-through' : '' ?>"><?= e($it['name']) ?></b>
                 <?php if ($it['note'] !== ''): ?><div class="tiny muted">Ghi chú: <?= e($it['note']) ?></div><?php endif; ?>
-                    <?php if (!$inv && $n - (int) $it['done'] > 0): ?>
+                <?php if (!$inv && $n - (int) $it['done'] > 0): ?>
                   <details class="inl"><summary>Hủy món</summary>
                     <form method="post"><?= csrf_field() ?><input type="hidden" name="act" value="cancel"><input type="hidden" name="item_id" value="<?= (int) $it['id'] ?>">
                       <label class="f">Số phần hủy (tối đa <?= $n - (int) $it['done'] ?>)<input type="number" name="qty" min="1" max="<?= $n - (int) $it['done'] ?>" value="1" required></label>

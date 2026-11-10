@@ -1,10 +1,10 @@
 <?php
-
+/* Bàn ăn và phiên bàn (mỗi lần khách ngồi = một phiên, có mã tham gia 4 số). */
 function tables_all(bool $onlyActive = false): array
 {
     return fetch_all('SELECT * FROM dining_tables' . ($onlyActive ? ' WHERE active = 1' : '') . ' ORDER BY code');
 }
-
+/** Danh sách bàn kèm cờ "đang có phiên mở" (dùng cho trang chủ khách). */
 function tables_with_open_flag(): array
 {
     return fetch_all('SELECT t.*, (SELECT COUNT(*) FROM table_sessions s WHERE s.table_id = t.id AND s.closed_at IS NULL) AS is_open
@@ -48,7 +48,7 @@ function sessions_open(): array
 {
     return fetch_all('SELECT * FROM table_sessions WHERE closed_at IS NULL');
 }
-
+/** Mở phiên: UNIQUE(table_id, open_flag) đảm bảo một bàn không có hai phiên mở cùng lúc. */
 function session_open(int $tableId, int $userId): int
 {
     $ban = table_find($tableId);
@@ -65,7 +65,7 @@ function session_close(int $id): void
     q('UPDATE table_sessions SET closed_at = ?, open_flag = NULL WHERE id = ?', [now(), $id]);
 }
 
-
+/** Trạng thái bàn: free / serving / awaiting-payment / paid. */
 function table_status(?array $session): string
 {
     if (!$session) {

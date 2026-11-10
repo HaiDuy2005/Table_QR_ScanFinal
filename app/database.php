@@ -1,5 +1,5 @@
 <?php
-
+// Kết nối MySQL bằng PDO (dùng chung cho cả web).
 function db(): PDO
 {
     static $pdo = null;
@@ -25,7 +25,7 @@ function db(): PDO
     return $pdo;
 }
 
-
+/** Chạy câu lệnh SQL có tham số, trả về PDOStatement. */
 function q(string $sql, array $params = []): PDOStatement
 {
     $st = db()->prepare($sql);
@@ -45,7 +45,7 @@ function insert_id(): int
 {
     return (int) db()->lastInsertId();
 }
-
+/** Chạy nhiều lệnh trong một giao dịch: lỗi thì hoàn tác tất cả. */
 function transaction(callable $fn)
 {
     $pdo = db();
@@ -62,7 +62,7 @@ function transaction(callable $fn)
     }
 }
 
-
+/** " FOR UPDATE" trên MySQL: khóa dòng đang sửa để hai người không ghi đè nhau. */
 function for_update(): string
 {
     return db()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql' ? ' FOR UPDATE' : '';

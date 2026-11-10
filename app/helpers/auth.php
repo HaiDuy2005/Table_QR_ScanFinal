@@ -1,4 +1,5 @@
 <?php
+/* ===== Đăng nhập và phân quyền nhân viên (phiên PHP, mật khẩu băm bcrypt) ===== */
 
 function current_user(): ?array
 {
@@ -8,7 +9,7 @@ function current_user(): ?array
     }
     $id = $_SESSION['user_id'] ?? null;
     $u = $id ? user_find((int) $id) : null;
-    if ($u && (int) $u['locked'] === 1) { 
+    if ($u && (int) $u['locked'] === 1) { // tài khoản bị khóa thì đăng xuất ngay
         unset($_SESSION['user_id']);
         $u = null;
     }
@@ -25,7 +26,7 @@ function home_for_role(string $role): string
     ][$role] ?? 'public/login.php';
 }
 
-
+/** Chặn truy cập nếu chưa đăng nhập hoặc không đúng vai trò (quản trị viên vào được tất cả). */
 function require_role(array $roles): array
 {
     $u = current_user();
@@ -39,7 +40,7 @@ function require_role(array $roles): array
     }
     return $u;
 }
-
+/** Kiểm tra quyền trong lúc xử lý thao tác (không chỉ ẩn nút). */
 function assert_role(array $roles): array
 {
     $u = current_user();
@@ -52,7 +53,7 @@ function assert_role(array $roles): array
     return $u;
 }
 
-
+/** Đăng nhập; sai quá 5 lần thì tạm khóa 60 giây. */
 function login_user(string $username, string $password): void
 {
     $lock = $_SESSION['login_lock'] ?? 0;

@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/layout.php';
 
-
+/** Khung điện thoại cho khách đã vào bàn: đầu trang cam + thanh điều hướng dưới. */
 function customer_open(array $table, array $session, string $active, string $title, int $refresh = 0): void
 {
     view_open($title . ' · ' . $table['name'], '', $refresh);

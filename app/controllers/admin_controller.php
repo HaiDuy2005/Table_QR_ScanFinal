@@ -1,5 +1,6 @@
 
 <?php
+/* ===== Quản trị: món, bàn, mã QR, tài khoản (chỉ vai trò admin) ===== */
 
 function admin_save_menu(): int
 {
@@ -24,11 +25,11 @@ function admin_save_menu(): int
         ? post('art')
         : 'bowl';
 
-    
+    // Giữ ảnh cũ nếu đang sửa món và không chọn ảnh mới
     $oldMenu = $id ? menu_find($id) : null;
     $img = $oldMenu['image_url'] ?? null;
 
-    
+    // Xử lý ảnh tải lên
     if (
         isset($_FILES['image_file']) &&
         $_FILES['image_file']['error'] !== UPLOAD_ERR_NO_FILE

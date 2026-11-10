@@ -1,3 +1,4 @@
+
 <?php
 require __DIR__ . '/../../app/init.php';
 require ROOT_DIR . '/views/customer_layout.php';
@@ -85,7 +86,7 @@ customer_open($table, $session, 'menu', 'Thực đơn');
                         <div>
                             <b style="font-size:16px"><?= e(money($m['price'])) ?></b>
                             <div class="tiny muted">/<?= e($m['unit']) ?></div>
-</div>
+                        </div>
 
                         <?php if (!(int) $m['available']): ?>
                             <?= pill('Tạm hết') ?>
@@ -170,4 +171,5 @@ customer_open($table, $session, 'menu', 'Thực đơn');
         font-size: 17px;
     }
 </style>
+
 <?php customer_close($table, $session, 'menu'); ?>

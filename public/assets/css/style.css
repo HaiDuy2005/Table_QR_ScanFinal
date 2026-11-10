@@ -61,7 +61,7 @@ label.f{display:grid;gap:4px;font-size:13px;font-weight:600} label.f span.hint{f
 @media(min-width:800px){.topbar nav{display:flex}}
 .ticket{position:absolute;left:0;right:0;top:100px;margin:0 auto;width:min(calc(100% - 24px),460px);animation:rise 1s cubic-bezier(.2,.8,.2,1) both;color:var(--ink)}
 .ticket-in{background:var(--paper);padding:36px 28px 90px;-webkit-mask:radial-gradient(circle 20px at 0 0,#0000 97%,#000) top left/51% 51% no-repeat,radial-gradient(circle 20px at 100% 0,#0000 97%,#000) top right/51% 51% no-repeat,radial-gradient(circle 20px at 0 100%,#0000 97%,#000) bottom left/51% 51% no-repeat,radial-gradient(circle 20px at 100% 100%,#0000 97%,#000) bottom right/51% 51% no-repeat;
-mask:radial-gradient(circle 20px at 0 0,#0000 97%,#000) top left/51% 51% no-repeat,radial-gradient(circle 20px at 100% 0,#0000 97%,#000) top right/51% 51% no-repeat,radial-gradient(circle 20px at 0 100%,#0000 97%,#000) bottom left/51% 51% no-repeat,radial-gradient(circle 20px at 100% 100%,#0000 97%,#000) bottom right/51% 51% no-repeat;transition:transform .2s}
+  mask:radial-gradient(circle 20px at 0 0,#0000 97%,#000) top left/51% 51% no-repeat,radial-gradient(circle 20px at 100% 0,#0000 97%,#000) top right/51% 51% no-repeat,radial-gradient(circle 20px at 0 100%,#0000 97%,#000) bottom left/51% 51% no-repeat,radial-gradient(circle 20px at 100% 100%,#0000 97%,#000) bottom right/51% 51% no-repeat;transition:transform .2s}
 .ticket h1{font-size:clamp(46px,12vw,76px);font-style:italic;line-height:.95;margin-top:22px}
 .ticket h1 span{display:block;overflow:hidden;padding-bottom:.14em} .ticket h1 span:nth-child(2){text-align:right}
 .ticket h1 i{display:inline-block;font-style:italic;animation:charIn .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*.045s + var(--o,0s))}
@@ -191,7 +191,7 @@ details.inl form{display:grid;gap:8px;margin-top:8px;padding:10px;background:var
 .tabbar{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
 .tabbar a{height:34px;display:inline-flex;align-items:center;padding:0 14px;border-radius:999px;background:var(--raised);text-decoration:none;font-weight:600;font-size:13px} .tabbar a.on{background:var(--ink);color:var(--brand)}
 
-
+/* ---- Đăng nhập ---- */
 .login{min-height:100vh;background:var(--brand);display:grid;place-items:center;padding:24px}
 .login .card2{background:var(--paper);width:min(94vw,420px);padding:32px 28px;animation:rise .8s cubic-bezier(.2,.8,.2,1) both;display:grid;gap:16px}
 .login h1{font-size:40px;font-style:italic;line-height:1}

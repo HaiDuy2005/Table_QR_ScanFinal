@@ -62,7 +62,7 @@ customer_open($table, $session, 'cart', 'Giỏ hàng');
         <div class="stepper">
           <form method="post" data-ajax><?= csrf_field() ?><input type="hidden" name="act" value="qty"><input type="hidden" name="menu_id" value="<?= (int) $m['id'] ?>"><input type="hidden" name="qty" value="<?= $c['qty'] - 1 ?>"><button type="submit" aria-label="Bớt">−</button></form>
           <b><?= (int) $c['qty'] ?></b>
-<form method="post" data-ajax><?= csrf_field() ?><input type="hidden" name="act" value="qty"><input type="hidden" name="menu_id" value="<?= (int) $m['id'] ?>"><input type="hidden" name="qty" value="<?= $c['qty'] + 1 ?>"><button type="submit" aria-label="Thêm">+</button></form>
+          <form method="post" data-ajax><?= csrf_field() ?><input type="hidden" name="act" value="qty"><input type="hidden" name="menu_id" value="<?= (int) $m['id'] ?>"><input type="hidden" name="qty" value="<?= $c['qty'] + 1 ?>"><button type="submit" aria-label="Thêm">+</button></form>
         </div>
         <form method="post" data-ajax><?= csrf_field() ?><input type="hidden" name="act" value="qty"><input type="hidden" name="menu_id" value="<?= (int) $m['id'] ?>"><input type="hidden" name="qty" value="0"><button class="btn btn-ghost btn-sm" type="submit">Xóa món</button></form>
       </div>

@@ -1,4 +1,5 @@
 <?php
+/* ===== Nhân viên: thu ngân, bếp, phục vụ. Mọi hàm đều tự kiểm tra quyền. ===== */
 
 function staff_open_session(int $tableId): string
 {
@@ -110,7 +111,7 @@ function staff_cancel_item(int $itemId, int $qty, string $reason): string
         if (invoice_of_session((int) $it['session_id'])) {
             throw new AppError('Hóa đơn đã chốt, không hủy món được nữa.');
         }
-        
+        // món đã làm xong không hủy được: giữ đúng served <= done <= qty - cancelled
         $max = net_qty($it) - (int) $it['done'];
         if ($qty < 1 || $qty > $max) {
             throw new AppError($max > 0 ? "Chỉ hủy được tối đa $max phần (phần đã làm xong thì không hủy)." : 'Món này đã làm xong, không hủy được.');
@@ -133,7 +134,7 @@ function staff_handle_notice(int $noticeId): string
     return 'Đã đánh dấu đã xử lý.';
 }
 
-
+/* ----- Bếp ----- */
 function kitchen_start(int $itemId): string
 {
     assert_role(['kitchen']);
@@ -162,7 +163,7 @@ function kitchen_set_done(int $itemId, int $done): string
     });
     return '';
 }
-
+/* ----- Phục vụ ----- */
 function waiter_set_served(int $itemId, int $served): string
 {
     assert_role(['waiter']);

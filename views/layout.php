@@ -1,5 +1,5 @@
 <?php
-
+/* Khung HTML dùng chung cho mọi trang. */
 function view_open(string $title, string $bodyClass = '', int $refresh = 0): void
 {
     ?><!doctype html>

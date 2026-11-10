@@ -1,7 +1,7 @@
 <?php
+/* ===== Khách tại bàn: tham gia bằng mã 4 số, giỏ hàng, gửi đơn ===== */
 
-
-
+/** Khách đã nhập đúng mã chưa? Quyền tham gia lưu trong phiên PHP và luôn được kiểm tra lại với CSDL. */
 function customer_context(string $code): array
 {
     $table = table_by_code($code);
@@ -49,7 +49,7 @@ function customer_join(string $code, string $qrKey, string $joinCode): void
     $_SESSION['join_fail'][$tid] = 0;
 }
 
-
+/* ----- Giỏ hàng nháp (lưu trong phiên PHP; đơn thật lưu trong MySQL khi gửi) ----- */
 function cart_get(int $sessionId): array
 {
     return $_SESSION['cart'][$sessionId] ?? [];
@@ -125,7 +125,7 @@ function customer_claim_transfer(array $table, array $session): string
     if ($inv['status'] === 'paid') {
         throw new AppError('Hóa đơn đã được thanh toán.');
     }
-    
+    // Quy tắc: khách báo chuyển khoản chỉ tạo thông báo cho thu ngân, không tự xác nhận thanh toán
     notice_add((int) $session['id'], (int) $table['id'], 'transfer-claim', 'Khách báo đã chuyển khoản – cần đối chiếu.');
     return 'Đã báo cho thu ngân. Nhân viên sẽ đối chiếu và xác nhận.';
 }

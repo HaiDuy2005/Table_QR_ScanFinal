@@ -1,5 +1,5 @@
 <?php
-
+// Xử lý nút "Lưu món" của menu_form.php rồi quay về danh sách.
 require __DIR__ . '/../../app/init.php';
 require_role(['admin']);
 if (!is_post()) {

@@ -1,5 +1,5 @@
 <?php
-
+/* Thống kê doanh thu: truy vấn trực tiếp từ MySQL (bảng payments, orders, ...). */
 function stats_today(): array
 {
     $from = date('Y-m-d 00:00:00');

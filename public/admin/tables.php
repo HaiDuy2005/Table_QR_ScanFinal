@@ -47,7 +47,7 @@ staff_open('Bàn và QR', 'public/admin/tables.php');
           <div class="grid gap" style="margin-top:8px">
             <div>Mã 4 số cố định: <b class="mono"><?= e($t['join_code']) ?></b></div>
             <div class="qrbox"><div data-qr="<?= e($qr) ?>" data-size="150"></div></div>
-<a class="tiny" href="<?= e($qr) ?>" target="_blank"><?= e($qr) ?></a>
+            <a class="tiny" href="<?= e($qr) ?>" target="_blank"><?= e($qr) ?></a>
             <button class="btn btn-sm" type="button" onclick="window.print()">In mã QR</button>
           </div></details></td>
     </tr>

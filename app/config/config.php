@@ -1,5 +1,5 @@
 <?php
-
+// Cấu hình kết nối MySQL của XAMPP. Mặc định XAMPP: user root, mật khẩu để trống.
 return [
     'db_host' => 'localhost',
     'db_port' => 3306,

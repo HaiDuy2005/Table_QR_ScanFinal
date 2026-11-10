@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/layout.php';
 
-
+/** Khung màn hình nhân viên: thanh bên theo vai trò + tờ giấy trắng. */
 function staff_open(string $title, string $active, int $refresh = 0): void
 {
     $u = current_user();
